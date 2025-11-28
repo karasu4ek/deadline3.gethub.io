@@ -7,6 +7,492 @@
     <div id="main">
         <h1>игра</h1>
         <p>игра в телеграмме</p>
-        <button id="play">пора играть</button>  
+<button onclick="myFunction()">пора играть</button>
+
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Казино (демо) — Виртуальные монеты</title>
+<style>
+  :root{
+    --bg:#0f1724;
+    --card:#0b1220;
+    --accent:#ffd166;
+    --muted:#9aa8bf;
+    --glass: rgba(255,255,255,0.03);
+    --good:#2dd4bf;
+    --bad:#ff6b6b;
+    font-family: Inter, system-ui, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  }
+  html,body{height:100%;margin:0;background:linear-gradient(180deg,#071029 0%, #071322 60%); color:#e6eef8;}
+  .wrap{max-width:980px;margin:28px auto;padding:20px;}
+  header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+  .brand{display:flex;gap:12px;align-items:center}
+  .logo {width:58px;height:58px;border-radius:10px;background:linear-gradient(135deg,#ff9f1c,#ff3d71);display:flex;align-items:center;justify-content:center;font-weight:700;color:#0b1220}
+  h1{font-size:20px;margin:0}
+  .top-actions{display:flex;gap:10px;align-items:center}
+  .btn{background:var(--card);border:1px solid rgba(255,255,255,0.04);padding:8px 12px;border-radius:8px;color:var(--accent);cursor:pointer}
+  .btn.secondary{color:var(--muted);background:var(--glass)}
+  .balance{background:linear-gradient(90deg,#042a2a,#08303c);padding:10px 14px;border-radius:10px;color:#c7fff2;font-weight:600}
+  main{display:grid;grid-template-columns:280px 1fr;gap:18px}
+  nav{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));padding:12px;border-radius:12px}
+  .menu-btn{display:block;width:100%;text-align:left;padding:10px;border-radius:8px;color:var(--muted);background:transparent;border:none;cursor:pointer;margin-bottom:8px}
+  .menu-btn.active{background:rgba(255,255,255,0.02);color:#fff;font-weight:600}
+  section.card{background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));padding:14px;border-radius:12px;min-height:320px}
+  .center{display:flex;align-items:center;justify-content:center}
+  .reels{display:flex;gap:8px;justify-content:center;margin:14px 0}
+  .reel{width:72px;height:72px;border-radius:10px;background:#071226;display:flex;align-items:center;justify-content:center;font-size:30px;border:1px solid rgba(255,255,255,0.03)}
+  .log{max-height:220px;overflow:auto;padding:8px;background:rgba(0,0,0,0.12);border-radius:8px;color:var(--muted);font-size:14px}
+  .controls{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+  input[type="number"]{padding:8px;border-radius:8px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:inherit;width:120px}
+  .small{font-size:13px;color:var(--muted)}
+  .wheel{width:220px;height:220px;border-radius:50%;background:conic-gradient(#0f3 0 30deg,#0fa 30deg 60deg,#0ab 60deg 90deg,#1f6 90deg 120deg,#19a 120deg 150deg,#0a6 150deg 180deg,#06a 180deg 210deg,#0a9 210deg 240deg,#1bd 240deg 270deg,#06a 270deg 300deg,#0c6 300deg 330deg,#0f6 330deg 360deg);display:flex;align-items:center;justify-content:center;position:relative}
+  .wheel::after{content:"";position:absolute;inset:8px;border-radius:50%;background:rgba(0,0,0,0.6)}
+  .wheel-pointer{width:0;height:0;border-left:10px solid transparent;border-right:10px solid transparent;border-bottom:20px solid var(--accent);position:absolute;top:-10px;left:calc(50% - 10px)}
+  .row{display:flex;gap:10px}
+  .card-title{font-weight:700;margin-bottom:8px}
+  .bj-hand{display:flex;gap:8px;flex-wrap:wrap}
+  .chip{background:linear-gradient(90deg,#ff9f1c,#ffd166);padding:6px 10px;border-radius:50px;color:#071226;font-weight:700}
+  footer{text-align:center;color:var(--muted);margin-top:16px;font-size:13px}
+  /* responsive */
+  @media (max-width:880px){
+    main{grid-template-columns:1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="brand">
+      <div class="logo">CZ</div>
+      <div>
+        <h1>Демо-Казино — виртуальные монеты</h1>
+        <div class="small">Игры: слот, рулетка, колесо фортуны, блэкджек. Только для развлечения.</div>
+      </div>
+    </div>
+
+    <div class="top-actions">
+
+castle, [27.11.2025 22:07]
+<div class="balance">Баланс: <span id="balance">0</span> <span class="chip">●</span></div>
+      <button id="profileBtn" class="btn secondary">Профиль</button>
+    </div>
+  </header>
+
+  <main>
+    <nav>
+      <button class="menu-btn active" data-target="slot">🎰 Слот</button>
+      <button class="menu-btn" data-target="roulette">🎲 Рулетка</button>
+      <button class="menu-btn" data-target="wheel">🎡 Колесо фортуны</button>
+      <button class="menu-btn" data-target="blackjack">🃏 Блэкджек</button>
+      <button class="menu-btn" data-target="daily">🎁 Ежедневный бонус</button>
+      <button class="menu-btn" data-target="log">📜 История</button>
+    </nav>
+
+    <section>
+      <!-- SLOT -->
+      <div id="slot" class="card">
+        <div class="card-title">🎰 Слот</div>
+        <div class="center">
+          <div class="reels" id="slotReels">
+            <div class="reel" id="r1">–</div>
+            <div class="reel" id="r2">–</div>
+            <div class="reel" id="r3">–</div>
+          </div>
+        </div>
+        <div class="controls">
+          <input id="slotBet" type="number" min="1" value="10" />
+          <button id="spinBtn" class="btn">Крутить</button>
+          <div class="small">Три в ряд — крупный выигрыш. Две одинаковые — частичный возврат.</div>
+        </div>
+      </div>
+
+      <!-- ROULETTE -->
+      <div id="roulette" class="card" style="display:none">
+        <div class="card-title">🎲 Рулетка (красное / чёрное)</div>
+        <div class="row" style="align-items:center;margin-bottom:8px">
+          <input id="rouletteBet" type="number" min="1" value="10" />
+          <button class="btn" id="betRed">Ставка: Красное</button>
+          <button class="btn" id="betBlack">Ставка: Чёрное</button>
+        </div>
+        <div id="rouletteResult" class="small">Сделайте ставку.</div>
+      </div>
+
+      <!-- WHEEL -->
+      <div id="wheel" class="card" style="display:none">
+        <div class="card-title">🎡 Колесо фортуны</div>
+        <div style="display:flex;gap:20px;align-items:center;flex-wrap:wrap">
+          <div style="position:relative">
+            <div class="wheel" id="wheelDisc"></div>
+            <div class="wheel-pointer"></div>
+          </div>
+          <div style="min-width:260px">
+            <div class="small">Сектора: множители ×0,×1,×2,×3,×5,×10</div>
+            <div style="margin-top:10px" class="row">
+              <input id="wheelBet" type="number" min="1" value="10" />
+              <button class="btn" id="wheelSpin">Крутить колесо</button>
+            </div>
+            <div id="wheelResult" class="small" style="margin-top:10px">Сделайте ставку и крутите.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- BLACKJACK -->
+      <div id="blackjack" class="card" style="display:none">
+        <div class="card-title">🃏 Блэкджек</div>
+        <div class="small">Правила: цель — 21. Блэкджек (21 из 2 карт) платит ×2.5. Ничья — возврат.</div>
+        <div style="margin-top:10px" class="row">
+          <input id="bjBet" type="number" min="1" value="20" />
+          <button class="btn" id="bjStart">Начать игру</button>
+          <button class="btn" id="bjHit" style="display:none">Взять</button>
+          <button class="btn" id="bjStand" style="display:none">Хватит</button>
+        </div>
+        <div style="margin-top:14px">
+          <div><strong>Игрок:</strong> <span id="bjPlayer" class="bj-hand">—</span> <span id="bjPlayerScore"></span></div>
+          <div style="margin-top:8px"><strong>Дилер:</strong> <span id="bjDealer" class="bj-hand">—</span> <span id="bjDealerScore"></span></div>
+          <div id="bjResult" class="small" style="margin-top:8px"></div>
+        </div>
+      </div>
+
+      <!-- DAILY -->
+      <div id="daily" class="card" style="display:none">
+        <div class="card-title">🎁 Ежедневный бонус</div>
+        <div class="small">Можно получить 1 раз в 24 часа. Бонус по умолчанию: <strong>+100</strong> монет.</div>
+        <div style="margin-top:10px" class="row">
+          <button class="btn" id="claimDaily">Получить бонус</button>
+
+<div id="dailyInfo" class="small" style="align-self:center">—</div>
+        </div>
+      </div>
+
+      <!-- LOG -->
+      <div id="log" class="card" style="display:none">
+        <div class="card-title">📜 История действий</div>
+        <div id="history" class="log">История пуста.</div>
+        <div style="margin-top:8px">
+          <button class="btn secondary" id="clearHistory">Очистить историю</button>
+        </div>
+      </div>
+
+    </section>
+  </main>
+
+  <footer>Демо-версия — виртуальные монеты. Никаких реальных денег.</footer>
+</div>
+
+<script>
+/*
+  Simple client-side casino demo.
+  State stored in localStorage:
+   - username
+   - balance (integer)
+   - lastDaily (timestamp seconds)
+   - history array
+*/
+(function(){
+  // --- Config ---
+  const STARTING = 200;
+  const DAILY_BONUS_AMOUNT = 100;
+  const SYMBOLS = ["🍒","🍋","⭐","🔔","7️⃣"];
+  const SLOT_JACK_MULT = 10; // три одинаковых -> ×10
+  const SLOT_PAIR_REFUND = 0.5; // две одинаковые -> 50% возврат
+  const BJ_BLACKJACK_MULT = 2.5; // blackjack payout
+  // --- Helpers ---
+  function $(id){ return document.getElementById(id); }
+  function nowSec(){ return Math.floor(Date.now()/1000); }
+  function saveState(key,val){ localStorage.setItem(key, JSON.stringify(val)); }
+  function loadState(key, def){ const v=localStorage.getItem(key); return v?JSON.parse(v):def; }
+  function addHistory(text){ const h=loadState('history',[]); h.unshift(`[${new Date().toLocaleString()}] ${text}`); saveState('history',h); renderHistory(); }
+  function setBalance(v){ saveState('balance', v); renderBalance(); }
+  function getBalance(){ return loadState('balance', STARTING); }
+  function ensureUser(){ if(localStorage.getItem('balance')===null){ setBalance(STARTING); localStorage.setItem('lastDaily', JSON.stringify(0)); localStorage.setItem('history', JSON.stringify([])); } renderBalance(); renderHistory(); renderDailyInfo(); }
+
+  // --- UI renderers ---
+  function renderBalance(){ $('balance').textContent = getBalance(); }
+  function renderHistory(){ const h=loadState('history',[]); const el=$('history'); if(!h.length){ el.textContent='История пуста.'; } else { el.innerHTML = h.map(s=>'<div>'+escapeHtml(s)+'</div>').join(''); } }
+  function escapeHtml(str){ return String(str).replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;'); }
+
+  // --- Menu switching ---
+  document.querySelectorAll('.menu-btn').forEach(btn=>{
+    btn.addEventListener('click', ()=> {
+      document.querySelectorAll('.menu-btn').forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+      const target = btn.dataset.target;
+      document.querySelectorAll('section > div.card').forEach(card=>card.style.display='none');
+      const show = $(target);
+      if(show) show.style.display='block';
+    });
+  });
+
+  // profile popup
+  $('profileBtn').addEventListener('click', ()=>{
+    let name = loadState('username', '');
+    const entered = prompt('Введите имя (отображается в профиле):', name || '');
+    if(entered !== null){
+      saveState('username', entered.trim());
+      addHistory('Пользователь обновил профиль: ' + (entered.trim()||'(без имени)'));
+      alert('Профиль сохранён.');
+    }
+  });
+
+  // --- SLOT logic ---
+  function setReels(a,b,c){ $('r1').textContent=a; $('r2').textContent=b; $('r3').textContent=c; }
+  $('spinBtn').addEventListener('click', ()=>{
+    const bet = Math.max(1, Math.floor(Number($('slotBet').value) || 0));
+    const balance = getBalance();
+    if(bet <= 0){ alert('Ставка должна быть > 0'); return; }
+    if(bet > balance){ alert('Недостаточно монет'); return; }
+    // take bet
+    setBalance(balance - bet);
+    addHistory(`Слот: ставка ${bet}`);
+
+    // spin animation
+    const spins = 18; // how many steps
+    let step = 0;
+    const interval = 60;
+    const spinSymbols = SYMBOLS;
+    const seq = [];
+    const id = setInterval(()=>{
+      const a = spinSymbols[Math.floor(Math.random()*spinSymbols.length)];
+      const b = spinSymbols[Math.floor(Math.random()*spinSymbols.length)];
+      const c = spinSymbols[Math.floor(Math.
+
+random()*spinSymbols.length)];
+      setReels(a,b,c);
+      seq.push([a,b,c]);
+      step++;
+      if(step >= spins){
+        clearInterval(id);
+        const [ra,rb,rc] = seq[seq.length-1];
+        // result
+        let win = 0;
+        if(ra === rb && rb === rc){
+          win = bet * SLOT_JACK_MULT;
+          addHistory(`Слот: 🎉 три ${ra} — выигрыш ${win}`);
+        } else if(ra === rb  rb === rc  ra === rc){
+          win = Math.floor(bet * SLOT_PAIR_REFUND);
+          addHistory(`Слот: две одинаковые — возвращено ${win}`);
+        } else {
+          win = 0;
+          addHistory(`Слот: проигрыш ${bet}`);
+        }
+        if(win) setBalance(getBalance() + win);
+        renderBalance();
+      }
+    }, interval);
+  });
+
+  // --- ROULETTE ---
+  const redSet = new Set([1,3,5,7,9,12,14,16,18,19,21,23,25,27,30,32,34,36]);
+  function rouletteResolve(bet, choiceColor){
+    const balance = getBalance();
+    if(bet <=0 || isNaN(bet)){ alert('Некорректная ставка'); return; }
+    if(bet > balance){ alert('Недостаточно монет'); return; }
+    setBalance(balance - bet);
+    const num = Math.floor(Math.random()*37); // 0..36
+    const color = (num === 0) ? 'зеро' : (redSet.has(num) ? 'красное' : 'чёрное');
+    let win = 0;
+    if(choiceColor === color) win = bet * 2;
+    if(win) setBalance(getBalance() + win);
+    addHistory(`Рулетка: ставка ${bet} на ${choiceColor}. Выпало ${num} (${color}). Выигрыш ${win}`);
+    $('rouletteResult').textContent = Выпало: ${num} (${color}). ${win?('Вы выиграли '+win):'Вы проиграли.'} Баланс: ${getBalance()};
+  }
+  $('betRed').addEventListener('click', ()=> rouletteResolve(Math.max(1, Math.floor(Number($('rouletteBet').value)||0)),'красное'));
+  $('betBlack').addEventListener('click', ()=> rouletteResolve(Math.max(1, Math.floor(Number($('rouletteBet').value)||0)),'чёрное'));
+
+  // --- WHEEL ---
+  const wheelMultipliers = [0,1,1,2,2,3,3,5,5,10,10,0];
+  function spinWheel(bet){
+    const balance = getBalance();
+    if(bet <=0 || isNaN(bet)){ alert('Некорректная ставка'); return; }
+    if(bet > balance){ alert('Недостаточно монет'); return; }
+    setBalance(balance - bet);
+    // spin visual: rotate wheelDisc
+    const disc = $('wheelDisc');
+    const spins = 6; // full rotations
+    const chosenIndex = Math.floor(Math.random()*wheelMultipliers.length);
+    // each sector 360/12 = 30deg; we want pointer at top; pick rotation so chosen lands at top
+    const sectorAngle = 360 / wheelMultipliers.length;
+    const targetAngle = 360*spins + (360 - (chosenIndex * sectorAngle) - sectorAngle/2);
+    disc.style.transition = 'transform 3s cubic-bezier(.12,.9,.26,1)';
+    disc.style.transform = rotate(${targetAngle}deg);
+    // after end
+    setTimeout(()=>{
+      // remove transition to allow next spin calculations (normalize transform)
+      disc.style.transition = '';
+      // compute multiplier
+      const mult = wheelMultipliers[chosenIndex];
+      const win = bet * mult;
+      if(win) setBalance(getBalance() + win);
+      addHistory(`Колесо: ставка ${bet}, множитель ×${mult}, выигрыш ${win}`);
+      $('wheelResult').textContent = Множитель ×${mult}. Выигрыш: ${win}. Баланс: ${getBalance()};
+      // set exact rotation in 0..360 to keep final position consistent
+      const finalRotation = (targetAngle % 360);
+      disc.style.transform = rotate(${finalRotation}deg);
+    }, 3100);
+  }
+  $('wheelSpin').addEventListener('click', ()=> spinWheel(Math.max(1, Math.floor(Number($('wheelBet').value)||0))));
+
+  // --- DAILY BONUS ---
+  function renderDailyInfo(){
+    const last = Number(loadState('lastDaily',0));
+    const now = nowSec();
+    const btn = $('claimDaily');
+    const info = $('dailyInfo');
+    if(now - last >= 86400){
+      btn.disabled = false;
+      info.textContent = Бонус доступен: +${DAILY_BONUS_AMOUNT} монет;
+    } else {
+      btn.disabled = true;
+      const left = 86400 - (now - last);
+      const h = Math.floor(left/3600);
+      const m = Math.floor((left%3600)/60);
+      info.textContent = Следующий бонус через ${h}ч ${m}м;
+    }
+  }
+  $('claimDaily').addEventListener('click', ()=>{
+
+const last = Number(loadState('lastDaily',0));
+    const now = nowSec();
+    if(now - last >= 86400){
+      setBalance(getBalance() + DAILY_BONUS_AMOUNT);
+      saveState('lastDaily', now);
+      addHistory(`Ежедневный бонус +${DAILY_BONUS_AMOUNT}`);
+      alert(`Вы получили +${DAILY_BONUS_AMOUNT} монет!`);
+      renderDailyInfo();
+    } else {
+      alert('Бонус ещё не доступен.');
+    }
+  });
+
+  // --- HISTORY clear ---
+  $('clearHistory').addEventListener('click', ()=>{
+    if(confirm('Очистить историю?')){ saveState('history', []); renderHistory(); }
+  });
+
+  // --- BLACKJACK ---
+  // Deck helpers
+  function drawCard(){
+    const faces = ["A","2","3","4","5","6","7","8","9","10","J","Q","K"];
+    return faces[Math.floor(Math.random()*faces.length)];
+  }
+  function valueOf(card){
+    if(card === "A") return 11;
+    if(["J","Q","K"].includes(card)) return 10;
+    return Number(card);
+  }
+  function calcHand(cards){
+    let total = 0; let aces = 0;
+    for(const c of cards){ total += valueOf(c); if(c==="A") aces++; }
+    while(total > 21 && aces>0){ total -= 10; aces--; }
+    return total;
+  }
+  // BJ state in-session
+  let bjState = null; // {player:[], dealer:[], bet:int}
+  function bjRender(){
+    if(!bjState){ $('bjPlayer').textContent='—'; $('bjDealer').textContent='—'; $('bjPlayerScore').textContent=''; $('bjDealerScore').textContent=''; $('bjHit').style.display='none'; $('bjStand').style.display='none'; return; }
+    $('bjPlayer').textContent = bjState.player.join(' ');
+    $('bjDealer').textContent = bjState.dealer.join(' ');
+    $('bjPlayerScore').textContent = = ${calcHand(bjState.player)};
+    // hide dealer hole card: show only first if playing
+    $('bjDealerScore').textContent = = ?;
+    $('bjHit').style.display='inline-block'; $('bjStand').style.display='inline-block';
+  }
+
+  $('bjStart').addEventListener('click', ()=>{
+    const bet = Math.max(1, Math.floor(Number($('bjBet').value)||0));
+    if(bet <=0) { alert('Ставка > 0'); return; }
+    if(bet > getBalance()){ alert('Недостаточно монет'); return; }
+    setBalance(getBalance() - bet);
+    // deal
+    const player = [drawCard(), drawCard()];
+    const dealer = [drawCard(), drawCard()];
+    bjState = { player, dealer, bet };
+    bjRender();
+    $('bjResult').textContent = 'Ход игрока.';
+    addHistory(`Блэкджек: ставка ${bet}. Получили карты.`);
+    // Check immediate blackjack
+    const pVal = calcHand(player);
+    const dVal = calcHand(dealer);
+    if(pVal === 21){
+      // player blackjack, immediate resolution
+      let win = Math.floor(bet * BJ_BLACKJACK_MULT);
+      // use Math.floor to keep integer coins
+      setBalance(getBalance() + win);
+      addHistory(`Блэкджек: игрок сделал Blackjack! Выигрыш ${win}`);
+      $('bjResult').textContent = Блэкджек! Вы выиграли ${win}. Баланс: ${getBalance()};
+      bjState = null;
+      bjRender();
+    }
+  });
+
+  $('bjHit').addEventListener('click', ()=>{
+    if(!bjState) return;
+    bjState.player.push(drawCard());
+    const p = calcHand(bjState.player);
+    bjRender();
+    addHistory(`Блэкджек: игрок взял карту (${bjState.player[bjState.player.length-1]}).`);
+    if(p > 21){
+      $('bjResult').textContent = Перебор ${p}. Вы проиграли ставку ${bjState.bet}.;
+      addHistory(`Блэкджек: перебор ${p}, ставка ${bjState.bet} потеряна.`);
+      bjState = null;
+      bjRender();
+    } else {
+      $('bjResult').textContent = Ваш ход. Счёт ${p}.;
+    }
+  });
+
+  $('bjStand').addEventListener('click', ()=>{
+    if(!bjState) return;
+    // dealer draws until >=17
+    while(calcHand(bjState.dealer) < 17){
+      bjState.dealer.push(drawCard());
+    }
+    const p = calcHand(bjState.player);
+    const d = calcHand(bjState.dealer);
+    let win = 0;
+    const bet = bjState.bet;
+    if(p > 21){
+      win = 0;
+    } else if(d > 21 || p > d){
+      win = bet * 2; // победа
+    } else if(p === d){
+      win = bet; // возврат
+    } else {
+      win = 0;
+    }
+    // special: if player had blackjack earlier it was already handled on start
+    // store integer coins (floor)
+    win = Math.floor(win);
+
+if(win) setBalance(getBalance() + win);
+    addHistory(`Блэкджек: итог игрок ${p} vs дилер ${d}. Выплата ${win}`);
+    $('bjResult').textContent = Итог — вы ${win?('выиграли '+win): (p===d? 'ничья, ставка возвращена':'проиграли')}. Баланс: ${getBalance()};
+    // reveal dealer
+    $('bjDealer').textContent = bjState.dealer.join(' ');
+    $('bjDealerScore').textContent = = ${d};
+    bjState = null;
+    bjRender();
+  });
+
+  // --- initial setup ---
+  ensureUser();
+
+  // restore wheel rotation initial (no transition)
+  setTimeout(()=>{ $('wheelDisc').style.transform = 'rotate(0deg)'; }, 50);
+
+  // render daily info periodically
+  setInterval(renderDailyInfo, 1000);
+
+  // show the first menu target explicitly (slot)
+  document.querySelectorAll('.menu-btn').forEach(b=>{ if(b.dataset.target==='slot') b.click(); });
+
+})();
+</script>
+</body>
+</html>
+
 </body>
 </html>
